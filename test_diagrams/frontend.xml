@@ -1,0 +1,40 @@
+<mxfile host="app.diagrams.net" modified="2024-04-24T09:16:25.345Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" version="24.2.7" etag="O8xHIjBJ-51_GG5tLvH1" type="device">
+  <diagram id="vQcYOtGFQnDF_SL-sGhd" name="Page-1">
+    <mxGraphModel dx="1125" dy="745" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="dogMpopWj8G7b-vbbDZy-3" value="&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;font-size: 24px; font-weight: 700; text-align: center; text-wrap: nowrap;&quot;&gt;Blue: Whole Screen&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;font-size: 24px; font-weight: 700; text-align: center; text-wrap: nowrap;&quot;&gt;Green: Container&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;font-size: 24px; font-weight: 700; text-align: center; text-wrap: nowrap;&quot;&gt;Orange: Sidebar&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;font-size: 24px; font-weight: 700; text-align: center; text-wrap: nowrap; background-color: initial;&quot;&gt;Purple: Columns&lt;/span&gt;&lt;br&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;font-size: 24px; font-weight: 700; text-align: center; text-wrap: nowrap;&quot;&gt;Yellow: Title&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;font-size: 24px; font-weight: 700; text-align: center; text-wrap: nowrap;&quot;&gt;Red: Input elements&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial; font-size: 24px; font-weight: 700; text-wrap: nowrap; text-align: center;&quot;&gt;White: Any named component&lt;/span&gt;&lt;br&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;" parent="1" vertex="1">
+          <mxGeometry width="450" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="REH8p-8bh4SVzu3RKBWu-4" value="NOTE: All structural components should be located inside and/or on top of the blue base screen element. Anything even a pixel outside of that will be removed." style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="468.5" y="20" width="301.5" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="GI5be8NEMBNBnBu12xkf-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;imageAspect=1;imageWidth=24;container=0;" parent="1" vertex="1">
+          <mxGeometry x="40" y="240" width="760" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="GI5be8NEMBNBnBu12xkf-3" value="Template Streamlit App" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;imageAspect=1;imageWidth=24;container=0;" parent="1" vertex="1">
+          <mxGeometry x="46" y="250" width="748" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="0YSerfDZNLMD4p4v0p6y-1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="440" y="320" width="340" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="0YSerfDZNLMD4p4v0p6y-2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="50" y="320" width="370" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="0YSerfDZNLMD4p4v0p6y-5" value="code" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="472.5" y="340" width="267.5" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="0YSerfDZNLMD4p4v0p6y-6" value="button" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="480" y="550" width="260" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="0YSerfDZNLMD4p4v0p6y-7" value="markdown" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="347.5" width="320" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="0YSerfDZNLMD4p4v0p6y-8" value="button" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="105" y="550" width="260" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

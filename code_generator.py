@@ -7,148 +7,145 @@ https://viewer.diagrams.net/index.html?tags=%7B%7D&highlight=0000ff&edit=_blank&
 from lxml import etree
 from pprint import pprint
 
-with open('test_app.xml', 'rb') as f:
-    data = f.read()
+def generate_streamlit(string) -> str:
 
-root = etree.fromstring(data)
-elements = root.xpath("//mxCell[string-length(@id) > 1 and string-length(@value) < 40]")
+    root = etree.fromstring(string)
+    elements = root.xpath("//mxCell[string-length(@id) > 1 and string-length(@value) < 40]")
 
-get_id = etree.XPath("@id")
-get_value = etree.XPath("@value")
-get_x = etree.XPath("mxGeometry/@x")
-get_y = etree.XPath("mxGeometry/@y")
-get_w = etree.XPath("mxGeometry/@width")
-get_h = etree.XPath("mxGeometry/@height")
-get_style = etree.XPath("@style")
+    get_id = etree.XPath("@id")
+    get_value = etree.XPath("@value")
+    get_x = etree.XPath("mxGeometry/@x")
+    get_y = etree.XPath("mxGeometry/@y")
+    get_w = etree.XPath("mxGeometry/@width")
+    get_h = etree.XPath("mxGeometry/@height")
+    get_style = etree.XPath("@style")
 
-class_dict = {
-    "#dae8fc": "window",
-    "#ffe6cc": "sidebar",
-    "#fff2cc": "title",
-    "#d5e8d4": "container",
-    "#e1d5e7": "column",
-    "#f8cecc": "input"
-}
+    class_dict = {
+        "#dae8fc": "window",
+        "#ffe6cc": "sidebar",
+        "#fff2cc": "title",
+        "#d5e8d4": "container",
+        "#e1d5e7": "column",
+        "#f8cecc": "input"
+    }
 
-TAB = "\t"
+    TAB = "    "
 
-def get_class(el: etree.Element) -> str:
-    style = get_style(el)[0]
-    style_lst = style.split(";")
-    for item in style_lst:
-        if "=" in item:
-            key, val = item.split("=")
-            if key == "fillColor":
-                return class_dict[val]
-        
-    return "component"
+    def get_class(el: etree.Element) -> str:
+        style = get_style(el)[0]
+        style_lst = style.split(";")
+        for item in style_lst:
+            if "=" in item:
+                key, val = item.split("=")
+                if key == "fillColor":
+                    return class_dict[val]
+            
+        return "component"
 
-def get_data(el: etree.Element) -> dict:
-    width = float(get_w(el)[0])
-    height = float(get_h(el)[0])
-    size = width*height
+    def get_data(el: etree.Element) -> dict:
+        width = float(get_w(el)[0])
+        height = float(get_h(el)[0])
+        size = width*height
 
-    return {
-            "id": get_id(el)[0],
-            "value": get_value(el)[0].lower(),
-            "x": float(get_x(el)[0]),
-            "y": float(get_y(el)[0]),
-            "w": width,
-            "h": height,
-            "size": size,
-            "class": get_class(el),
-        }
+        return {
+                "id": get_id(el)[0],
+                "value": get_value(el)[0].lower(),
+                "x": float(get_x(el)[0]),
+                "y": float(get_y(el)[0]),
+                "w": width,
+                "h": height,
+                "size": size,
+                "class": get_class(el),
+            }
 
-def contains(el1: dict,el2: dict) -> bool:
-    if el1['x'] <= el2['x'] and el1['y'] <= el2['y']:
-        if el2['x'] + el2['w'] <= el1['x'] + el1['w'] and el2['y'] + el2['h'] <= el1['y'] + el1['h']:
-            return True
-    return False
+    def contains(el1: dict,el2: dict) -> bool:
+        if el1['x'] <= el2['x'] and el1['y'] <= el2['y']:
+            if el2['x'] + el2['w'] <= el1['x'] + el1['w'] and el2['y'] + el2['h'] <= el1['y'] + el1['h']:
+                return True
+        return False
 
 
-element_data = [get_data(el) for el in elements]
-element_data = sorted(element_data, key=lambda x: x["size"], reverse=True)
+    element_data = [get_data(el) for el in elements]
+    element_data = sorted(element_data, key=lambda x: x["size"], reverse=True)
 
-columns = [col for col in element_data if col['class'] == 'column']
-column_dict = {col['id']:f"col{i}" for i, col in enumerate(columns)}
-inputs = [inp for inp in element_data if inp['class'] == 'input']
-input_dict = {inp['id']:f"input{i}" for i, inp in enumerate(inputs)}
+    columns = [col for col in element_data if col['class'] == 'column']
+    column_dict = {col['id']:f"col{i}" for i, col in enumerate(columns)}
+    inputs = [inp for inp in element_data if inp['class'] == 'input']
+    input_dict = {inp['id']:f"input{i}" for i, inp in enumerate(inputs)}
 
-for i in range(len(element_data)):
-    element_data[i]["children"] =  []
+    for i in range(len(element_data)):
+        element_data[i]["children"] =  []
 
-i = len(element_data)-2
-while i > -1 and len(element_data) > 1:
-    for j in range(len(element_data)-1, i, -1):
-        if contains(element_data[i], element_data[j]):
-            element_data[i]["children"].append(element_data[j])
-            element_data.pop(j)
-    i -= 1
+    i = len(element_data)-2
+    while i > -1 and len(element_data) > 1:
+        for j in range(len(element_data)-1, i, -1):
+            if contains(element_data[i], element_data[j]):
+                element_data[i]["children"].append(element_data[j])
+                element_data.pop(j)
+        i -= 1
 
-element_tree = element_data[0]
-pprint(element_tree)
+    element_tree = element_data[0]
 
-print("\n","="*80,"\n")
-
-def recursive_streamlit(el_dict, col_count=[0], indent = 0):
-    children = el_dict['children']
-    if not len(children):
-        if el_dict['class'] == "component":
-            if el_dict['value'] == "image":
-                return [f'{indent * TAB}st.image("default.png")']
+    def recursive_streamlit(el_dict, indent = 0):
+        children = el_dict['children']
+        if not len(children):
+            if el_dict['class'] == "component":
+                if el_dict['value'] == "image":
+                    return [f'{indent * TAB}st.image("default.png")']
+                else:
+                    return [f'{indent * TAB}st.{el_dict["value"]}()']
+            elif el_dict['class'] == "input":
+                return [f'{indent * TAB}st.{el_dict["value"]}(label=\"{el_dict["id"]}\")']
+            elif el_dict['class'] == "title":
+                return [f'{indent * TAB}st.title(\"{el_dict["value"].capitalize()}\")']
             else:
-                return [f'{indent * TAB}st.{el_dict["value"]}()']
-        elif el_dict['class'] == "input":
-            return [f'{indent * TAB}st.{el_dict["value"]}(label=\"{el_dict["id"]}\")']
-        elif el_dict['class'] == "title":
-            return [f'{indent * TAB}st.title(\"{el_dict["value"].capitalize()}\")']
+                print("The element below was expecting to have at least one child element.")
+                return []
+
+        if el_dict['class'] == "window":
+            code = [f'{indent * TAB}st.set_page_config(layout="wide")\n']
+            children = sorted(children, key=lambda x: (x['y'], x['x']))
+        elif el_dict['class'] == "container":
+            code = [f'{indent * TAB}with st.container():']
+            indent += 1
+            children = sorted(children, key=lambda x: (x['y'], x['x']))
+        elif el_dict['class'] == "sidebar":
+            code = [f"{indent*TAB}with st.sidebar:"]
+            indent += 1
+            children = sorted(children, key=lambda x: (x['y'], x['x']))
+        elif el_dict['class'] == "column":
+            code = [f"{indent*TAB}with {el_dict['id']}:"]
+            indent += 1
         else:
-            print("The element below was expecting to have at least one child element.")
-            print(el_dict)
-            return []
+            code = []
 
-    if el_dict['class'] == "window":
-        code = [f'{indent * TAB}st.set_page_config(layout="wide")\n']
-        children = sorted(children, key=lambda x: (x['y'], x['x']))
-    elif el_dict['class'] == "container":
-        code = [f'{indent * TAB}with st.container():']
-        indent += 1
-        children = sorted(children, key=lambda x: (x['y'], x['x']))
-    elif el_dict['class'] == "sidebar":
-        code = [f"{indent*TAB}with st.sidebar:"]
-        indent += 1
-        children = sorted(children, key=lambda x: (x['y'], x['x']))
-    else:
-        code = []
+        for child in children:
+            try:
+                if child['class'] != "column":
+                    code += recursive_streamlit(child, indent)
+                else:
+                    columns = [el for el in children if el['class']=='column']
+                    vars = ", ".join([f"{columns[i]['id']}" for i in range(len(columns))])
+                    code += [f"{indent * TAB}{vars} = st.columns({str([round(col['w']) for col in columns])})"]
+                    for i, col in enumerate(columns):
+                        code += recursive_streamlit(col, indent)
+                    for col in columns:
+                        children.remove(col)
+            except Exception as e:
+                print(e)
+                print("columns already handled")
 
-    for child in children:
-        try:
-            if child['class'] != "column":
-                code += recursive_streamlit(child, col_count, indent)
-            else:
-                columns = [el for el in children if el['class']=='column']
-                vars = ", ".join([f"{columns[i]['id']}" for i in range(len(columns))])
-                code += [f"{indent * TAB}{vars} = st.columns({str([round(col['w']) for col in columns])})"]
-                for i, col in enumerate(columns):
-                    code += [f"{indent * TAB}with {col['id']}:"]
-                    col_count[0] += 1
-                    code += recursive_streamlit(col, col_count, indent+1)
-                for col in columns:
-                    children.remove(col)
-        except Exception as e:
-            print(e)
-            print("columns already handled")
+        return code
 
-    return code
+    code = recursive_streamlit(element_tree)
+    code = ["import streamlit as st\n"] + code
+    code_string = "\n".join(code)
 
-code = recursive_streamlit(element_tree)
-code = ["import streamlit as st\n"] + code
-code_string = "\n".join(code)
+    for id in column_dict:
+        replacement = column_dict[id] if code_string.count(id) > 1 else "_"
+        code_string = code_string.replace(id, replacement)
 
-for id in column_dict:
-    code_string = code_string.replace(id, column_dict[id])
+    for id in input_dict:
+        code_string = code_string.replace(id, input_dict[id])
 
-for id in input_dict:
-    code_string = code_string.replace(id, input_dict[id])
-
-print(code_string)
+    return code_string
