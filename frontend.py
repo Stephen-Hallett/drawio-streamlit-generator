@@ -2,9 +2,14 @@ from code_generator import generate_streamlit
 
 from code_editor import code_editor
 import streamlit as st
+from streamlit_extras.buy_me_a_coffee import button
 
 
-st.set_page_config(layout="wide")
+st.set_page_config(
+    layout="wide",
+    page_title="Streamlit Generator",
+    page_icon="static/favicon-32x32.png",
+)
 
 btn_settings_editor_btns = [
     {
@@ -17,7 +22,17 @@ btn_settings_editor_btns = [
     },
 ]
 
-st.title("Streamlit Code Generator")
+title, btn = st.columns([11, 2])
+with title:
+    st.title("Streamlit Code Generator")
+with btn:
+    button(
+        username="stephenhallett",
+        bg_color="#008080",
+        font_color="#FFFFFF",
+        coffee_color="#FFFFFF",
+        floating=False,
+    )
 st.divider()
 col0, col1 = st.columns([370, 340])
 with col0:
@@ -34,7 +49,6 @@ with col1:
     st.subheader("Generated code", help="Code to replicate the uploaded wireframe")
     if file is not None:
         content = file.getvalue().decode("utf-8")
-        print(content)
     else:
         with open("template.xml", "rb") as f:
             content = f.read()
