@@ -4,6 +4,7 @@ https://viewer.diagrams.net/index.html?tags=%7B%7D&highlight=0000ff&edit=_blank&
 """
 
 from lxml import etree
+import math
 from typing import Any
 
 
@@ -135,11 +136,14 @@ def generate_streamlit(string: str) -> str:
                         [el for el in children if el["class"] == "column"],
                         key=lambda child: child["x"],
                     )
+
+                    gcd = math.gcd(*[round(col["w"]) for col in columns])
+
                     vars = ", ".join(
                         [f"{columns[i]['id']}" for i in range(len(columns))]
                     )
                     code += [
-                        f"{indent * TAB}{vars} = st.columns({str([round(col['w']) for col in columns])})"
+                        f"{indent * TAB}{vars} = st.columns({str([int(round(col['w'])/gcd) for col in columns])})"
                     ]
                     for i, col in enumerate(columns):
                         code += recursive_streamlit(col, indent)
